@@ -1,11 +1,11 @@
 <template>
     <div class="table-body__container">
-        <div class="table-row" :class="{bold: isFolder, active: isActive(model.id)}">
-            <div class="table-body__row-name table-row__cell">
+        <div class="table-row" :class="{bold: isFolder, active: isActive(model.id)}" v-if="model.name">
+            <div class="table-body__row-name table-row__cell" >
                 <span v-if="!edit_active">{{model.name}}</span>
                 <input type="text" v-model="name" v-else/>
                 <span v-if="isFolder" @click="toggle()">
-                    {{open ? '-' : '+'}}
+                    <i :class="[open ? 'fas fa-angle-down' : 'fas fa-angle-right',]"></i>
                 </span>
             </div>
             <div class="table-body__row-count table-row__cell">{{model.count}}</div>
@@ -19,7 +19,7 @@
                 </div>
             </div>
         </div>
-        <div v-show="open" v-if="isFolder" class="table-row">
+        <div v-show="open" v-if="isFolder" class="table-row hasChild">
             <Tree class="item" v-for="model in model.children" :key="model.id" :active="active" :model="model"></Tree>
         </div>
   </div>
@@ -43,6 +43,12 @@ export default {
         isFolder() {
             return this.model.children &&
             this.model.children.length
+        },
+        getIcon(){
+            if(this.open){
+                return 'fas fa-angle-up'
+            }
+            return 'fas fa-angle-down'
         }
     },
     methods: {
@@ -59,7 +65,7 @@ export default {
             this.$store.dispatch('updateStructure', {'id': id, 'name': this.name})
         },
         deleteRow(id){
-            console.log(id)
+            this.$store.dispatch('deleteRow', id)
         }
     }
 }
@@ -91,7 +97,19 @@ export default {
         display: flex;
         flex-basis: 100%;
         flex-wrap: wrap;
-        
+        flex-direction: row;
+    }
+    .table-row.hasChild:first-child{
+        margin-left: 0;
+    }
+    .table-row.hasChild .table-row.hasChild{
+        background-color: #E6EDFA;
+    }
+    .table-row.hasChild .table-row.hasChild .table-row.hasChild{
+        background-color: #CADCFC;
+    }
+    .table-row.hasChild .table-row.hasChild .table-row.hasChild .table-body__container .hasChild{
+        background-color: #A9C2F9;
     }
     .table-row__cell{
         padding: 10px;
@@ -115,4 +133,6 @@ export default {
     .table-body__row-action div{
         padding: 0 10px;
     }
+    
+    
 </style>

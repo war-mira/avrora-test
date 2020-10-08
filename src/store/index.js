@@ -56,7 +56,19 @@ export default new Vuex.Store({
             }
             searchTree(state.structure, data.id);
         },
-        
+        DELETE_ITEM(state, id){
+            const deleteRow = (data, id) => {
+                for(let item of data){
+                    if(item.id === id){
+                        data.splice(data.indexOf(item), 1)
+                    }else if(item.children){
+                        deleteRow(item.children, id)
+                    }
+                }
+            }
+
+            deleteRow(state.structure.children, id)
+        }
     },
     actions: {
         createItem({commit}, payload){
@@ -65,8 +77,8 @@ export default new Vuex.Store({
         updateStructure({commit}, payload){
             commit('UPDATE_STRUCTURE', payload)
         },
-        deleteRow({commit}, payload){
-            commit('DELETE_ITEM', payload)
+        deleteRow({commit}, id){
+            commit('DELETE_ITEM', id)
         },
     },
 });

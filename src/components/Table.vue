@@ -8,8 +8,8 @@
                 <div class="table-header__row">
                     <input type="button" value="Добавить" v-if="!create_active" class="btn btn-icon" @click="create_active = !create_active"/>
                     <div class="table-header__create-row" v-if="create_active">
-                        <input type="text" v-model="new_name"/>
-                        <input type="number" v-model="new_count"/>
+                        <input type="text" v-model="new_name" placeholder="Название"/>
+                        <input type="number" v-model="new_count" placeholder="Количество"/>
                         <div class="btn-save" @click="createItem">Сохранить</div>
                     </div>
                 </div>
@@ -20,11 +20,14 @@
                     <div class="table-body__row-count table-row__cell">Общее количество</div>
                     <div class="table-body__row-action table-row__cell">Действия</div>
                 </div>
-                <Tree class="item" :active="active" :model="treeData" v-on:active="updateTree"></Tree>
+                <Tree class="item" :active="active" 
+                    :model="treeData" 
+                    v-on:active="updateTree"
+                ></Tree>
             </div>
             <div class="table-footer">
                 <div class="table-body__row-name table-row__cell">Сумма сотрудников:</div>
-                <div class="table-body__row-count table-row__cell">{people_sum}</div>
+                <div class="table-body__row-count table-row__cell">{{people_sum}}</div>
                 <div class="table-body__row-action table-row__cell"></div>
             </div>
         </div>
@@ -41,14 +44,14 @@ export default {
     data(){
         return {
             active: 0,
-            new_name: '',
-            new_count: 0,
+            new_name: null,
+            new_count: null,
             create_active: false,
             people_sum: 0
         }
     },
     created: function() {
-        
+        this.countPeople()
     },
     computed: {
         ...mapGetters({
@@ -57,8 +60,8 @@ export default {
     },
    methods: {
        reset(){
-            this.new_count = 0;
-            this.new_name = ''
+            this.new_count = null;
+            this.new_name = null;
        },
        updateTree(val){
             this.active = val;
@@ -69,11 +72,25 @@ export default {
                 this.create_active = false;
                 this.reset()
             })
+       },
+       countPeople(){
+            if(!this.treeData){
+                return
+            }
+            const counter = (data) =>{
+                for(let item of data){
+                    this.people_sum += item.count;
+                    if(item.children){
+                        counter(item.children)
+                    }
+                }
+            }
+            counter(this.treeData.children)
        }
    },
    watch: {
         treeData: function () {
-          console.log(this.treeData)
+          this.countPeople()
         }
     }
 }
@@ -83,7 +100,7 @@ export default {
     .table{
         width: 100%;
     }
-    .table-body__title{
+    .table-body__title, .table-footer{
         display: flex;
     }
         .table-header{
@@ -124,7 +141,18 @@ export default {
     }
     .table-row__cell{
         padding: 10px;
-        border-left: 1px solid #F9FBFE;
+        border: 1px solid #F9FBFE;
+    }
+    .table-header__create-row{
+        display: flex;
+    }
+    .table-header__create-row input{
+        margin-right: 10px;
+    }
+    .btn-save{
+        border: 1px solid #CADCFC;
+        cursor: pointer;
+        padding: 5px 15px;
     }
 
 </style>
