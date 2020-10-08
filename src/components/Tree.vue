@@ -106,11 +106,23 @@ export default {
     .table-row.hasChild .table-row.hasChild{
         background-color: #E6EDFA;
     }
+    .table-row.hasChild .table-row.hasChild .table-body__row-name{
+        padding-left: 20px;
+        width: calc(70% - 20px);
+    }
     .table-row.hasChild .table-row.hasChild .table-row.hasChild{
         background-color: #CADCFC;
     }
+    .table-row.hasChild .table-row.hasChild .table-row.hasChild .table-body__row-name{
+        padding-left: 40px;
+        width: calc(70% - 40px);
+    }
     .table-row.hasChild .table-row.hasChild .table-row.hasChild .table-body__container .hasChild{
         background-color: #A9C2F9;
+    }
+    .table-row.hasChild .table-row.hasChild .table-row.hasChild .table-body__container .hasChild .table-body__row-name{
+        padding-left: 60px;
+        width: calc(70% - 60px);
     }
     .table-row__cell{
         padding: 10px;
