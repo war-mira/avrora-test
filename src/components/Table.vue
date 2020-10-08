@@ -123,7 +123,7 @@ export default {
                 color: rgb(48,62,79);
             }
     .table-body__row-name{
-        width: 60%;
+        width: 70%;
         text-align: left;
         display: flex;
         justify-content: space-between;

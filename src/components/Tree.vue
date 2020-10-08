@@ -1,6 +1,6 @@
 <template>
     <div class="table-body__container">
-        <div class="table-row" :class="{bold: isFolder, active: isActive(model.id)}" v-if="model.name">
+        <div class="table-row" :class="{active: isActive(model.id)}" v-if="model.name">
             <div class="table-body__row-name table-row__cell" >
                 <span v-if="!edit_active">{{model.name}}</span>
                 <input type="text" v-model="name" v-else/>
@@ -78,9 +78,6 @@ export default {
     .item {
         cursor: pointer;
     }
-    .bold {
-        font-weight: bold;
-    }
     ul {
         padding-left: 1em;
         line-height: 1.5em;
@@ -96,11 +93,15 @@ export default {
     .table-row{
         display: flex;
         flex-basis: 100%;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         flex-direction: row;
+    }
+    .table-row.hasChild{
+        flex-wrap: wrap;
     }
     .table-row.hasChild:first-child{
         margin-left: 0;
+        
     }
     .table-row.hasChild .table-row.hasChild{
         background-color: #E6EDFA;
@@ -116,7 +117,7 @@ export default {
         border: 1px solid #F9FBFE;
     }
     .table-body__row-name{
-        width: 60%;
+        width: 70%;
         text-align: left;
         display: flex;
         justify-content: space-between;
